@@ -1,0 +1,13 @@
+{
+    "my-enabled-feature": {
+        "defaultValue": false,
+        "rules": [
+            {
+                "force": true
+            }
+        ]
+    },
+    "my-disabled-feature": {
+        "defaultValue": false
+    }
+}

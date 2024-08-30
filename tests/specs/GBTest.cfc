@@ -4,9 +4,24 @@ component extends="testbox.system.BaseSpec"{
 		GB = new models.GB( {
 			clientKey=getSystemSetting( 'clientKey', '' ),
 			datasource:{
-				type : 'default',
+				type : 'default', // fileData
 				fileDataPath : "/tests/data/test-flags.json"
-			}
+			},
+			userAttributesProvider : function() {
+				return {
+					"id" : createGUID(),
+					"FOO": "bar"
+				};
+			},
+			xfeatureUsageCallback : ( featureResult )=>{
+				SystemOutput( "*********************************************************
+				Feature Usage: #serializeJSON( featureResult )#", true );
+			},
+			xtrackingCallback : ( experiment, experimentResult )=>{
+				SystemOutput( "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+				Experiment: #serializeJSON(experiment)#
+				Experiment Result: #serializeJSON( experimentResult )#", true );
+			},
 		} );
 	}
 
@@ -80,16 +95,68 @@ component extends="testbox.system.BaseSpec"{
 				});
 
 				it("can eval a feature", function(){
-					dump( GB.evalFeature( 'my-ab-feature' ) )
+					var result = GB.evalFeature( 'my-ab-boolean' );
+					expect( result ).toBeStruct();
+					expect( result ).tohaveKey( "value" );
+					expect( result.value ).toBeBoolean();
+					var value = result.value;
+					expect( result ).tohaveKey( "on" );
+					expect( result.on ).toBeBoolean();
+					expect ( result.on ).toBe( value );
+					expect( result ).tohaveKey( "off" );
+					expect( result.off ).toBeBoolean();
+					expect ( result.off ).toBe( !value );
+
+					expect( result ).tohaveKey( "source" );
+					expect( result.source ).toBeString();
+					expect( result.source ).toBe( "experiment" );
+					
+					expect( result ).tohaveKey( "experimentResult" );
+					expect( result.experimentResult ).toBeStruct();
+					expect( result.experimentResult ).tohaveKey( "value" );
+					expect( result.experimentResult.value ).toBe( value );
+					
+					expect( result ).tohaveKey( "experiment" );
+					expect( result.experiment ).toBeStruct();
+					expect( result.experiment ).tohaveKey( "key" );
+					expect( result.experiment.key ).toBe( "test" );
+					expect( result.experiment ).tohaveKey( "name" );
+					expect( result.experiment.name ).toBe( "test" );
+					expect( result.experiment ).tohaveKey( "variations" );
+					expect( result.experiment.variations ).toBeArray();
+					expect( result.experiment.variations ).toBe( [ false, true ] );
+
+					expect( result.experiment ).tohaveKey( "weights" );
+					expect( result.experiment.weights ).toBeArray();
+					expect( result.experiment.weights ).toBe( [ .5, .5 ] );
+
+					expect( result.experiment ).tohaveKey( "coverage" );
+					expect( result.experiment.coverage ).toBe( 1 );
+
+					expect( result.experiment ).tohaveKey( "meta" );
+					expect( result.experiment.meta ).toBeArray();
+					expect( result.experiment.meta ).toBe( [
+						{
+							key : 0,
+							name : "Control"
+						},
+						{
+							key : 1,
+							name : "Variation 1"
+						}
+					] );
+
+
 				});
 
-				xit("can check a/b feature", function(){
+				it("can check a/b feature", function(){
+					var iterations = 5000;
 					var defaultCount = 0;
 					var bradCount = 0;
 					var luisCount = 0;
 					var mikeCount = 0;
-					for( var i = 0 ; i < 100 ; i++ ) {
-						switch( GB.evalFeature( 'my-ab-feature' ) ) {
+					for( var i = 0 ; i < iterations ; i++ ) {
+						switch( GB.getFeatureValue( 'my-ab-feature' ) ) {
 							case "default":
 								defaultCount++;
 								break;
@@ -104,20 +171,25 @@ component extends="testbox.system.BaseSpec"{
 								break;
 						}
 					}
-dump( defaultCount );
-dump( bradCount );
-dump( luisCount );
-dump( mikeCount );
+
 					// percent should be around 25%
-					expect( round( (defaultCount/100)*100 ) ).ToBe( 25 );
+					expect( round( (defaultCount/iterations)*100 ) ).toBeBetween( 23, 27 );
+					expect( round( (bradCount/iterations)*100 ) ).toBeBetween( 23, 27 );
+					expect( round( (luisCount/iterations)*100 ) ).toBeBetween( 23, 27 );
+					expect( round( (mikeCount/iterations)*100 ) ).toBeBetween( 23, 27 );
 
 				});
+				
 
-				
-				
-				
+				it("can check register one-off feature usage callback", function(){
+					request.callbackCalled = '';
+					expect( GB.isOn( 'my-enabled-feature', {}, ( featureResult )=>{
+						request.callbackCalled = featureResult.value;
+					} ) ).toBe( true );
+					expect( request.callbackCalled ).toBe( true );
+
+				});
 			});
-
 
 		});
 

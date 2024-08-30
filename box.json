@@ -1,6 +1,6 @@
 {
     "dependencies":{
-        "growthbook-sdk-java":"jar:https://jitpack.io/com/github/growthbook/growthbook-sdk-java/0.9.9/growthbook-sdk-java-0.9.9.jar",
+        "growthbook-sdk-java":"jar:https://jitpack.io/com/github/growthbook/growthbook-sdk-java/0.9.91/growthbook-sdk-java-0.9.91.jar",
         "annotations":"jar:https://repo.maven.apache.org/maven2/org/jetbrains/annotations/24.0.0/annotations-24.0.0.jar",
         "commons-math3":"jar:https://repo.maven.apache.org/maven2/org/apache/commons/commons-math3/3.6.1/commons-math3-3.6.1.jar",
         "failureaccess":"jar:https://repo.maven.apache.org/maven2/com/google/guava/failureaccess/1.0.1/failureaccess-1.0.1.jar",

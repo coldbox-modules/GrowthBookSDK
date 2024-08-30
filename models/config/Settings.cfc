@@ -4,7 +4,7 @@ component {
         return {
             apiHost : 'https://cdn.growthbook.io',
             clientKey : '',
-            enabled : false,
+            enabled : true,
             allowUrlOverrides : false,
             encryptionKey : '',
             isQaMode : false,
@@ -14,22 +14,13 @@ component {
                 type : 'default',
                 fileDataPath : ""
             },
-            contextProvider : ()=>{},
-            flagChangeListener : '',
-            // flagChangeListener : ( featureKey )=>writeDump( var="Flag [#featureKey#] changed!", output='console' );
-            flagValueChangeListeners : [
-                /*
-                {
-                    featureKey : 'my-feature',
-                    user : { key : 12345 },
-                    udf : ( oldValue, newValue )=>writeDump( var="Flag [test] changed from [#oldValue#] to [#newValue#]!", output='console' )
-                },
-                {
-                    featureKey : 'another-feature',
-                    udf : ( oldValue, newValue )=>{}
-                }
-                */
-            ]
+            userAttributesProvider : ()=>{},
+            // Called every time feature is used regardles of the source of the value.  If a trackingCallBack is also configured, feature evaluations which
+            // involved an experiement will fire BOTH callbacks.
+            featureUsageCallback : '', // ( featureResult )=>{}
+            // Called ONLY if an experiment was run.  Will not be called if a feature is evaluated with direct value or if an 
+            // experiment is at play but not affecting 100% of the samples and didn't affect this decision.
+            trackingCallback: '' // ( experiment, experimentResult )=>{}
         };
     }
 

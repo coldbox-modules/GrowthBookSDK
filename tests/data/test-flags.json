@@ -9,5 +9,107 @@
     },
     "my-disabled-feature": {
         "defaultValue": false
+    },
+    "my-string-feature": {
+        "defaultValue": "default",
+        "rules": [
+            {
+                "force": "my-value"
+            }
+        ]
+    },
+    "my-number-feature": {
+        "defaultValue": 42
+    },
+    "my-json-feature": {
+        "defaultValue": {
+            "brad": "wood",
+            "arr": [
+                1,
+                2,
+                3
+            ],
+            "test": true
+        }
+    },
+    "my-rollout-feature": {
+        "defaultValue": false,
+        "rules": [
+            {
+                "force": true,
+                "coverage": 0.5,
+                "hashAttribute": "id"
+            }
+        ]
+    },
+    "my-ab-feature": {
+        "defaultValue": "default",
+        "rules": [
+            {
+                "coverage": 0.75,
+                "hashAttribute": "id",
+                "seed": "76326e99-1046-43dd-b43b-4748c5cd0691",
+                "hashVersion": 2,
+                "variations": [
+                    "brad",
+                    "luis",
+                    "mike"
+                ],
+                "weights": [
+                    0.3321,
+                    0.3333,
+                    0.3346
+                ],
+                "key": "my-experiment",
+                "meta": [
+                    {
+                        "key": "0",
+                        "name": "brad"
+                    },
+                    {
+                        "key": "1",
+                        "name": "luis"
+                    },
+                    {
+                        "key": "2",
+                        "name": "mike"
+                    }
+                ],
+                "phase": "2",
+                "name": "My experiment"
+            }
+        ]
+    },
+    "my-ab-boolean": {
+        "defaultValue": false,
+        "rules": [
+            {
+                "coverage": 1,
+                "hashAttribute": "id",
+                "seed": "5a5b9ad7-2664-4ec2-a650-78607a00e5a2",
+                "hashVersion": 2,
+                "variations": [
+                    false,
+                    true
+                ],
+                "weights": [
+                    0.5,
+                    0.5
+                ],
+                "key": "test",
+                "meta": [
+                    {
+                        "key": "0",
+                        "name": "Control"
+                    },
+                    {
+                        "key": "1",
+                        "name": "Variation 1"
+                    }
+                ],
+                "phase": "1",
+                "name": "test"
+            }
+        ]
     }
 }

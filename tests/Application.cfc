@@ -11,6 +11,7 @@ component{
 	// any mappings go here, we create one that points to the root called test.
 	this.mappings[ "/tests" ] = getDirectoryFromPath( getCurrentTemplatePath() );
 	this.mappings[ "/root" ] = getCanonicalPath( this.mappings[ "/tests" ] & '/../' );
+	this.mappings[ "/cbproxies" ] = this.mappings[ "/root" ] & '/modules/cbproxies';
 
 
 	this.javaSettings = {

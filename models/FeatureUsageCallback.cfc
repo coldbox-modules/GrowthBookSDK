@@ -21,7 +21,7 @@ component extends="cbproxies.models.BaseProxy" {
 		loadContext();
 		try {
 			lock name="#getConcurrentEngineLockName()#" type="exclusive" timeout="60" {
-				variables.target( deserializeJSON( featureResult.toJSON() ) );
+				variables.target( featureKey, deserializeJSON( featureResult.toJSON() ) );
 			}
 		} catch ( any e ) {
 			// Log it, so it doesn't go to ether

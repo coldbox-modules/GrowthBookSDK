@@ -9,11 +9,11 @@ component extends="testbox.system.BaseSpec"{
 			},
 			userAttributesProvider : function() {
 				return {
-					"id" : createGUID(),
+					"id" : createUUID(),
 					"FOO": "bar"
 				};
 			},
-			xfeatureUsageCallback : ( featureResult )=>{
+			xfeatureUsageCallback : ( featureKey, featureResult )=>{
 				SystemOutput( "*********************************************************
 				Feature Usage: #serializeJSON( featureResult )#", true );
 			},
@@ -21,7 +21,7 @@ component extends="testbox.system.BaseSpec"{
 				SystemOutput( "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 				Experiment: #serializeJSON(experiment)#
 				Experiment Result: #serializeJSON( experimentResult )#", true );
-			},
+			}
 		} );
 	}
 
@@ -182,11 +182,15 @@ component extends="testbox.system.BaseSpec"{
 				
 
 				it("can check register one-off feature usage callback", function(){
-					request.callbackCalled = '';
-					expect( GB.isOn( 'my-enabled-feature', {}, ( featureResult )=>{
-						request.callbackCalled = featureResult.value;
+					request.callbackName = '';
+					request.callbackValue = '';
+					expect( GB.isOn( 'my-enabled-feature', {}, ( featureKey, featureResult )=>{
+						request.callbackName = featureKey;
+						request.callbackValue = featureResult.value;
 					} ) ).toBe( true );
-					expect( request.callbackCalled ).toBe( true );
+
+					expect( request.callbackName ).toBe( 'my-enabled-feature' );
+					expect( request.callbackValue ).toBe( true );
 
 				});
 			});

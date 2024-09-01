@@ -4,7 +4,7 @@ A CFML SDK for GrowthBook feature flags
 
 ## Requirements
 
-This runs on Lucee 5+ and Adobe CF 2023+.  It may work on other versions, but I haven't tested it.
+This runs on BoxLang, Lucee 5+ and Adobe CF 2023+.  It may work on other versions, but I haven't tested it.
 The SDK is set up as a ColdBox module, however it will also work with WireBox standalone or just a legacy app.
 
 ## Installation
